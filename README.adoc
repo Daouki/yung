@@ -1,0 +1,22 @@
+= Yung
+
+:toc:
+:toc-placement: macro
+:toclevels: 3
+:toc-title:
+
+Yung is an impurely functional dialect of the LISP programming language. It takes a lot
+of inspiration from other LISPs such as Clojure and Racket, but also from functional
+languages - ML and Haskell.
+
+This repository contains the interpreter, standard library, and documentation.
+
+toc::[]
+
+== Quick start
+
+== Contributing
+
+== License
+
+Yung is distributed under the terms of the MIT license. See link:LICENSE[LICENSE] for details.
