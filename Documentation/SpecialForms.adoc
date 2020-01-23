@@ -1,0 +1,31 @@
+= Special forms
+
+== (def _symbol_ _init_)
+
+Defines a binding in the current scope with the name of _symbol_ to the value of _init_.
+
+== (def _symbol_ [_params_*] _expr_*)
+
+Defines a function.
+
+== (def _symbol_ ([_params_*] _expr_*)+)
+
+Defines a multi-arity function.
+
+== (fn [params*] _expr_*)
+
+Defines an anonymous function (lambda / closure).
+
+== (do _expr_*)
+
+Evaluates the expressions _expr_s in order and returns the value of the last. If no expressions
+are supplied, returns _nil_.
+
+== (if _test_ _then_ _else_)
+
+Evaluates _test_. If the result isn't a falsehood (neither _#f_ nor _nil_), evaluates and yields
+_then_, otherwise, evaluates and yields _else_.
+
+== (quote _form_)
+
+Yields the unevaluated _form_.

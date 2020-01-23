@@ -1,0 +1,77 @@
+= Grammar
+
+This document describes the formal grammar of the Yung language in the extended Backus-Naur form.
+
+----
+program
+        : form*
+
+form
+        : collection
+        | expression
+
+collection
+        : list
+        | vector
+        | set
+        | map
+
+list
+        : "(" form* ")"
+
+vector
+        : "[" form* "]"
+
+set
+        : "#[" form* "]"
+
+map
+        : "{" form* "}"
+
+expression
+        : nil
+        | symbol
+        | keyword
+        | boolean
+        | number
+        | string
+
+nil
+        : "nil"
+
+symbol
+        : symbol-start
+        | symbol-continuation*
+
+symbol-start
+        : [a-z]
+        | [A-Z]
+        | [!$%^&*_-+=<>?/]
+
+symbol-continuation
+        : symbol-start
+        | digit
+
+keyword
+        : ":" symbol
+
+boolean
+        : "#t"
+        | "#f"
+
+number
+        : integer
+        | float
+
+integer
+        : digit+
+
+float
+        : digit+ .? digit+
+
+digit
+        : [0-9]
+
+string
+        : """ ?* """
+----
