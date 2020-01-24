@@ -31,7 +31,7 @@ namespace Yung
                 {
                     var argument = arguments.Head.Value;
                     if (!(argument is Integer) && !(argument is Float))
-                        throw new TypeMismatch(
+                        throw new TypeMismatchException(
                             "The argument to the `+' function has to be either of type Integer or Float.");
 
                     return unaryOperation != null
@@ -46,7 +46,7 @@ namespace Yung
                     var rest = arguments.ToArray()[1..];
                     foreach (var value in rest)
                     {
-                        if (value.GetType() != expressionType) throw new TypeMismatch();
+                        if (value.GetType() != expressionType) throw new TypeMismatchException();
                         result = (INumber) binaryOperation.Invoke(result, new object?[] {value});
                     }
 
@@ -54,7 +54,7 @@ namespace Yung
                 }
                 catch (InvalidCastException)
                 {
-                    throw new TypeMismatch();
+                    throw new TypeMismatchException();
                 }
             });
         }

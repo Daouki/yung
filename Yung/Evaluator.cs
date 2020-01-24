@@ -7,7 +7,7 @@ namespace Yung
 {
     public static class Evaluator
     {
-        public static IValue Evaluate(IValue ast, Dictionary<Symbol, IValue> environment)
+        public static IValue Evaluate(IValue ast, Environment environment)
         {
             if (!(ast is List)) return EvaluateNode(ast, environment);
 
@@ -19,15 +19,15 @@ namespace Yung
             return function.Apply(arguments);
         }
 
-        private static IValue EvaluateNode(IValue node, Dictionary<Symbol, IValue> environment)
+        private static IValue EvaluateNode(IValue node, Environment environment)
         {
             switch (node)
             {
                 case List list: return new List(EvaluateCollection(list, environment));
                 case Vector vector: return new Vector(EvaluateCollection(vector, environment));
                 case Symbol symbol:
-                    if (!environment.TryGetValue(symbol, out var value))
-                        throw new UndefinedSymbol(symbol);
+                    var value = environment.GetValue(symbol); 
+                    if (value == null) throw new UndefinedSymbolException(symbol);
                     return value;
                 default:
                     return node;
@@ -36,7 +36,7 @@ namespace Yung
 
         private static IEnumerable<IValue> EvaluateCollection(
             IEnumerable<IValue> collection,
-            Dictionary<Symbol, IValue> environment)
+            Environment environment)
         {
             var oldValues = collection.ToArray();
             var newValues = new IValue[oldValues.Length];

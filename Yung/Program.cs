@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Yung.AST;
 using Yung.Exceptions;
@@ -11,7 +10,7 @@ namespace Yung
         private static void Main(string[] args)
         {
             var version = Assembly.GetEntryAssembly()?.GetName().Version;
-            Console.WriteLine($"yung v{version} {Environment.NewLine}");
+            Console.WriteLine($"yung v{version} {System.Environment.NewLine}");
 
             REPL();
         }
@@ -23,13 +22,11 @@ namespace Yung
         /// </summary>
         private static void REPL()
         {
-            var environment = new Dictionary<Symbol, IValue>
-            {
-                {new Symbol("+"), Core.Add},
-                {new Symbol("-"), Core.Subtract},
-                {new Symbol("*"), Core.Multiply},
-                {new Symbol("/"), Core.Divide}
-            };
+            var environment = new Environment();
+            environment.Add(new Symbol("+"), Core.Add);
+            environment.Add(new Symbol("-"), Core.Subtract);
+            environment.Add(new Symbol("*"), Core.Multiply);
+            environment.Add(new Symbol("/"), Core.Divide);
 
             while (true)
                 try
@@ -59,8 +56,7 @@ namespace Yung
             return Reader.Read(sourceCode);
         }
 
-        private static IValue Evaluate(IValue abstractSyntaxTree,
-            Dictionary<Symbol, IValue> environment)
+        private static IValue Evaluate(IValue abstractSyntaxTree, Environment environment)
         {
             return Evaluator.Evaluate(abstractSyntaxTree, environment);
         }

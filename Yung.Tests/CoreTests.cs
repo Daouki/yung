@@ -8,14 +8,17 @@ namespace Yung.Tests
 {
     public class CoreFunctionTests
     {
-        private readonly Dictionary<Symbol, IValue> _environment = new Dictionary<Symbol, IValue>
+        private Environment _environment;
+        
+        public CoreFunctionTests()
         {
-            {new Symbol("+"), Core.Add},
-            {new Symbol("-"), Core.Subtract},
-            {new Symbol("*"), Core.Multiply},
-            {new Symbol("/"), Core.Divide}
-        };
-
+            _environment = new Environment();
+            _environment.Add(new Symbol("+"), Core.Add);
+            _environment.Add(new Symbol("-"), Core.Subtract);
+            _environment.Add(new Symbol("*"), Core.Multiply);
+            _environment.Add(new Symbol("/"), Core.Divide);
+        }
+        
         [Theory]
         [InlineData("+")]
         [InlineData("-")]
@@ -172,14 +175,14 @@ namespace Yung.Tests
         public void Evaluate_NumberOperation_CombineIntegersAndFloats_ThrowsTypeMismatch()
         {
             var input = Reader.Read("(- 67 12.396)");
-            Assert.Throws<TypeMismatch>(() => Evaluator.Evaluate(input, _environment));
+            Assert.Throws<TypeMismatchException>(() => Evaluator.Evaluate(input, _environment));
         }
 
         [Fact]
         public void Evaluate_NumberOperation_InvalidType_ThrowsTypeMismatch()
         {
             var input = Reader.Read("(+ [] 7 () 2.4)");
-            Assert.Throws<TypeMismatch>(() => Evaluator.Evaluate(input, _environment));
+            Assert.Throws<TypeMismatchException>(() => Evaluator.Evaluate(input, _environment));
         }
     }
 }

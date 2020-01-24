@@ -25,7 +25,7 @@ namespace Yung.AST
             }
             catch (InvalidCastException)
             {
-                throw new TypeMismatch();
+                throw new TypeMismatchException();
             }
         }
 
@@ -37,7 +37,7 @@ namespace Yung.AST
             }
             catch (InvalidCastException)
             {
-                throw new TypeMismatch();
+                throw new TypeMismatchException();
             }
         }
 
@@ -49,7 +49,7 @@ namespace Yung.AST
             }
             catch (InvalidCastException)
             {
-                throw new TypeMismatch();
+                throw new TypeMismatchException();
             }
         }
 
@@ -61,7 +61,7 @@ namespace Yung.AST
             }
             catch (InvalidCastException)
             {
-                throw new TypeMismatch();
+                throw new TypeMismatchException();
             }
         }
     }
