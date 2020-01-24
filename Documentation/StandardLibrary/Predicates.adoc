@@ -1,0 +1,69 @@
+= Predicates
+
+Predicates are functions that take only a single argument and return a boolean.
+
+== Type predicates
+
+=== (is-boolean? _form_)
+
+Returns true if `form` is a boolean, otherwise, returns false.
+
+=== (is-char? _form_)
+
+Returns true if `form` is a character, otherwise, returns false.
+
+=== (is-collection? _form_)
+
+Returns true if `form` is a collection, otherwise, returns false.
+
+=== (is-float? _form_)
+
+Returns true if `form` is a floating point number, otherwise, returns false.
+
+=== (is-integer? _form_)
+
+Returns true if `form` is an integer, otherwise, returns false.
+
+=== (is-keyword? _form_)
+
+Returns true if `form` is a keyword, otherwise, returns false.
+
+=== (is-list? _form_)
+
+Returns true if `form` is a list, otherwise, returns false.
+
+=== (is-nil? _form_)
+
+Returns true if `form` is a nil, otherwise, returns false.
+
+=== (is-number? _form_)
+
+Returns true if `form` is either an integer or floating point number, otherwise, returns false.
+
+=== (is-string? _form_)
+
+Returns true if `form` is a string, otherwise, returns false.
+
+=== (is-vector? _form_)
+
+Returns true if `form` is a vector, otherwise, returns false.
+
+== Collection predicates
+
+=== (is-empty? _collection_)
+
+Returns true if `collection` is empty, otherwise, returns false.
+
+=== (is-not-empty? _collection_)
+
+Returns true if `collection` is not empty, otherwise, returns false.
+
+== Number predicates
+
+=== (is-even? _number_)
+
+Returns true if `number` is an even number, otherwise, returns false.
+
+=== (is-odd? _number_)
+
+Returns true if `number` is an odd number, otherwise, returns false.

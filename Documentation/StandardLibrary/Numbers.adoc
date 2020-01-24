@@ -1,0 +1,84 @@
+= Numbers
+
+== +
+
+`(+)` `(+ x)` `(+ x y)` `(+ x y & more)`
+
+Returns the sum of the given numbers. `(+)` without arguments returns nil.
+
+== -
+
+`(-)` `(- x)` `(- x y)` `(- x y & more)`
+
+Returns the difference of the given numbers. `(-)` without arguments returns nil. If no ys are
+supplied, returns the negation of x.
+
+== *
+
+`(\*)` `(* x)` `(* x y)` `(* x y & more)`
+
+Returns the sum of the given numbers. `(*)` without arguments returns nil.
+
+== /
+
+`(/)` `(/ x)` `(/ x y)` `(/ x y & more)`
+
+Returns the product of the given numbers. `(/)` without arguments returns nil.
+
+== mod
+== rem
+
+== =
+
+Returns true if all of the given numbers are equal to each other, otherwise, returns false.
+
+== <>
+
+Returns false if all of the given numbers are different from each other, otherwise, returns false.
+
+== <
+== \<=
+== >
+== >=
+
+== not
+
+`(not value)`
+
+Returns the bitwise complement of a `value`.
+
+== and
+
+`(and value)`
+
+== nand
+
+`(nand value)`
+
+== or
+
+`(or value)`
+
+== nor
+
+`(nor value)`
+
+== xor
+
+`(xor value)`
+
+== nxor
+
+`(nxor value)`
+
+== >>
+
+`(>> value positions)`
+
+Bitwise shift right.
+
+== <<
+
+`(<< value positions)`
+
+Bitwise shift left.
