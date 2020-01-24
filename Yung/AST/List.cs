@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Yung.AST
@@ -32,7 +31,7 @@ namespace Yung.AST
         /// <summary>
         ///     Get the first element in the list.
         /// </summary>
-        public Node Head { get; private set; } = null;
+        public Node Head { get; private set; }
 
         /// <summary>
         ///     Get all elements from the list, except the first.

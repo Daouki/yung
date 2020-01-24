@@ -26,7 +26,7 @@ namespace Yung
                 case List list: return new List(EvaluateCollection(list, environment));
                 case Vector vector: return new Vector(EvaluateCollection(vector, environment));
                 case Symbol symbol:
-                    var value = environment.GetValue(symbol); 
+                    var value = environment.GetValue(symbol);
                     if (value == null) throw new UndefinedSymbolException(symbol);
                     return value;
                 default:

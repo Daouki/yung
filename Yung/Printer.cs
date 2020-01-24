@@ -18,6 +18,7 @@ namespace Yung
                     CultureInfo.InvariantCulture.NumberFormat)),
                 Nil _ => "nil",
                 Symbol symbol => symbol.Value,
+                Function _ => "#<function>",
                 Keyword keyword => keyword.Value,
                 List list => PrintCollection("(", ")", list),
                 Vector vector => PrintCollection("[", "]", vector),

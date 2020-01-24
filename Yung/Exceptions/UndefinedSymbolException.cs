@@ -19,7 +19,7 @@ namespace Yung.Exceptions
         }
 
         public UndefinedSymbolException(Symbol symbol)
-            : base($"Symbol `{symbol}' was not defined in the current scope.")
+            : base($"Symbol `{symbol.Value}' was not defined in the current scope.")
         {
         }
     }

@@ -8,5 +8,10 @@
         }
 
         public bool Value { get; }
+
+        public static explicit operator bool(Boolean boolean)
+        {
+            return boolean.Value;
+        }
     }
 }

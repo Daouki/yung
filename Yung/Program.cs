@@ -27,6 +27,14 @@ namespace Yung
             environment.Add(new Symbol("-"), Core.Subtract);
             environment.Add(new Symbol("*"), Core.Multiply);
             environment.Add(new Symbol("/"), Core.Divide);
+            environment.Add(new Symbol("is-nil?"), Core.IsNil);
+            environment.Add(new Symbol("is-boolean?"), Core.IsBoolean);
+            environment.Add(new Symbol("is-float?"), Core.IsFloat);
+            environment.Add(new Symbol("is-integer?"), Core.IsInteger);
+            environment.Add(new Symbol("is-number?"), Core.IsNumber);
+            environment.Add(new Symbol("is-keyword?"), Core.IsKeyword);
+            environment.Add(new Symbol("is-list?"), Core.IsList);
+            environment.Add(new Symbol("is-vector?"), Core.IsVector);
 
             while (true)
                 try

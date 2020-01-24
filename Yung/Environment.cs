@@ -20,7 +20,10 @@ namespace Yung
         /// </summary>
         /// <param name="binding">Name of the binding.</param>
         /// <param name="value">Value of the binding.</param>
-        /// <exception cref="SymbolRedefinitionException">Thrown when a symbol with the name 'binding' already exists in the current scope.</exception>
+        /// <exception cref="SymbolRedefinitionException">
+        ///     Thrown when a symbol with the name 'binding' already exists in the
+        ///     current scope.
+        /// </exception>
         public void Add(Symbol binding, IValue value)
         {
             if (Contains(binding)) throw new SymbolRedefinitionException(binding);
@@ -35,7 +38,7 @@ namespace Yung
         }
 
         /// <summary>
-        /// Check whether the current scope contains a binding.
+        ///     Check whether the current scope contains a binding.
         /// </summary>
         /// <param name="binding">Name of the binding.</param>
         /// <returns>If the binding exists, returns true, otherwise, returns false.</returns>

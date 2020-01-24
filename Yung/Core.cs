@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Yung.AST;
 using Yung.Exceptions;
+using Boolean = Yung.AST.Boolean;
 
 namespace Yung
 {
@@ -19,6 +20,28 @@ namespace Yung
 
         public static readonly Function Divide =
             MakeNumberOperation(typeof(INumber).GetMethod("Divide"));
+
+        public static Function IsNil = new Function(args => new Boolean(args.Head.Value is Nil));
+
+        public static readonly Function IsBoolean =
+            new Function(args => new Boolean(args.Head.Value is Boolean));
+
+        public static Function
+            IsFloat = new Function(args => new Boolean(args.Head.Value is Float));
+
+        public static readonly Function IsInteger =
+            new Function(args => new Boolean(args.Head.Value is Integer));
+
+        public static readonly Function IsNumber =
+            new Function(args => new Boolean(args.Head.Value is INumber));
+
+        public static readonly Function IsKeyword =
+            new Function(args => new Boolean(args.Head.Value is Keyword));
+
+        public static readonly Function IsList = new Function(args => new Boolean(args.Head.Value is List));
+
+        public static readonly Function IsVector =
+            new Function(args => new Boolean(args.Head.Value is Vector));
 
         private static Function MakeNumberOperation(
             MethodBase binaryOperation,

@@ -8,8 +8,6 @@ namespace Yung.Tests
 {
     public class CoreFunctionTests
     {
-        private Environment _environment;
-        
         public CoreFunctionTests()
         {
             _environment = new Environment();
@@ -17,8 +15,11 @@ namespace Yung.Tests
             _environment.Add(new Symbol("-"), Core.Subtract);
             _environment.Add(new Symbol("*"), Core.Multiply);
             _environment.Add(new Symbol("/"), Core.Divide);
+            _environment.Add(new Symbol("is-nil?"), Core.IsNil);
         }
-        
+
+        private readonly Environment _environment;
+
         [Theory]
         [InlineData("+")]
         [InlineData("-")]
@@ -169,6 +170,24 @@ namespace Yung.Tests
                     $"(/ {value.ToString("N7", CultureInfo.InvariantCulture.NumberFormat)})");
             var actual = Evaluator.Evaluate(input, _environment);
             Assert.Equal(expected, ((Float) actual).Value);
+        }
+
+        public static IEnumerable<object[]> _isNilData => new List<object[]>
+        {
+            new object[] {"nil", true},
+            new object[] {"#t", false},
+            new object[] {"12.682", false},
+            new object[] {"-12867", false},
+            new object[] {":foo", false},
+        };
+
+        [Theory]
+        [MemberData(nameof(_isNilData))]
+        public void Evaluate_IsNil(string value, bool expected)
+        {
+            var input = Reader.Read($"(is-nil? {value})");
+            var actual = (Boolean) Evaluator.Evaluate(input, _environment);
+            Assert.Equal(expected, (bool) actual);
         }
 
         [Fact]
