@@ -17,6 +17,8 @@ namespace Yung
                 Float floating => AddDotZeroIfInteger(floating.Value.ToString("G7",
                     CultureInfo.InvariantCulture.NumberFormat)),
                 Nil _ => "nil",
+                Symbol symbol => symbol.Value,
+                Keyword keyword => keyword.Value,
                 List list => PrintCollection("(", ")", list),
                 Vector vector => PrintCollection("[", "]", vector),
                 _ => throw new YungException(

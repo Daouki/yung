@@ -1,5 +1,4 @@
 ﻿using Xunit;
-
 using Yung.AST;
 using Yung.Exceptions;
 
@@ -7,13 +6,6 @@ namespace Yung.Tests
 {
     public class ReaderTests
     {
-        [Fact]
-        public void Read_Nil_HasCorrectType()
-        {
-            var actual = Reader.Read("nil");
-            Assert.IsType<Nil>(actual);
-        }
-        
         [Theory]
         [InlineData("#t")]
         [InlineData("#f")]
@@ -22,7 +14,7 @@ namespace Yung.Tests
             var actual = Reader.Read(input);
             Assert.IsType<Boolean>(actual);
         }
-        
+
         [Theory]
         [InlineData("#t", true)]
         [InlineData("#f", false)]
@@ -44,7 +36,7 @@ namespace Yung.Tests
             var actual = Reader.Read(input);
             Assert.IsType<Integer>(actual);
         }
-        
+
         [Theory]
         [InlineData("0", 0)]
         [InlineData("-1", -1)]
@@ -57,7 +49,7 @@ namespace Yung.Tests
             var actual = (Integer) Reader.Read(input);
             Assert.Equal(expected, actual.Value);
         }
-        
+
         [Theory]
         [InlineData("0.0")]
         [InlineData("-1.0")]
@@ -68,7 +60,7 @@ namespace Yung.Tests
             var actual = Reader.Read(input);
             Assert.IsType<Float>(actual);
         }
-        
+
         [Theory]
         [InlineData("0.0", 0.0f)]
         [InlineData("-1.0", -1.0f)]
@@ -97,7 +89,7 @@ namespace Yung.Tests
         {
             Assert.Throws<YungException>(() => Reader.Read(input));
         }
-        
+
         [Theory]
         [InlineData(")")]
         [InlineData("]")]
@@ -105,6 +97,48 @@ namespace Yung.Tests
         public void Read_UnexpectedEndOfCollection_ThrowsYungException(string input)
         {
             Assert.Throws<YungException>(() => Reader.Read(input));
+        }
+
+        [Theory]
+        [InlineData("asdf")]
+        [InlineData("ASDF")]
+        [InlineData("AsDf")]
+        [InlineData("a123")]
+        [InlineData("A123")]
+        [InlineData("A?2!")]
+        [InlineData("*s+f")]
+        [InlineData("is-s?")]
+        [InlineData("+")]
+        [InlineData("!@$%^&*_-+=<>?/")]
+        public void Read_Symbol_HasCorrectType(string input)
+        {
+            var actual = Reader.Read(input);
+            Assert.IsType<Symbol>(actual);
+        }
+
+        [Theory]
+        [InlineData("asdf")]
+        [InlineData("ASDF")]
+        [InlineData("AsDf")]
+        [InlineData("a123")]
+        [InlineData("A123")]
+        [InlineData("A?2!")]
+        [InlineData("*s+f")]
+        [InlineData("is-s?")]
+        [InlineData("+")]
+        [InlineData("!$%^&*_-+=<>?/")]
+        public void Read_Symbol_HasCorrectValue(string input)
+        {
+            var expected = input;
+            var actual = Reader.Read(input);
+            Assert.Equal(expected, ((Symbol) actual).Value);
+        }
+
+        [Fact]
+        public void Read_Nil_HasCorrectType()
+        {
+            var actual = Reader.Read("nil");
+            Assert.IsType<Nil>(actual);
         }
     }
 }

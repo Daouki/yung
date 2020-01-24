@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Yung.AST;
 using Yung.Exceptions;
@@ -22,18 +23,26 @@ namespace Yung
         /// </summary>
         private static void REPL()
         {
+            var environment = new Dictionary<Symbol, IValue>
+            {
+                {new Symbol("+"), Core.Add},
+                {new Symbol("-"), Core.Subtract},
+                {new Symbol("*"), Core.Multiply},
+                {new Symbol("/"), Core.Divide}
+            };
+
             while (true)
                 try
                 {
                     Console.Write("yung> ");
                     var input = Console.ReadLine();
-                    var output = Print(Evaluate(Read(input)));
+                    var output = Print(Evaluate(Read(input), environment));
                     Console.WriteLine(output);
                 }
-                // catch (NotImplementedException e)
-                // {
-                //     Console.Error.WriteLine($"Error: Feature not implemented: {e.Message}");
-                // }
+                catch (FeatureNotImplementedException e)
+                {
+                    Console.Error.WriteLine($"Error: Feature not implemented: {e.Message}");
+                }
                 catch (YungException e)
                 {
                     Console.Error.WriteLine($"Error: {e.Message}");
@@ -50,9 +59,10 @@ namespace Yung
             return Reader.Read(sourceCode);
         }
 
-        private static IValue Evaluate(IValue abstractSyntaxTree)
+        private static IValue Evaluate(IValue abstractSyntaxTree,
+            Dictionary<Symbol, IValue> environment)
         {
-            return abstractSyntaxTree;
+            return Evaluator.Evaluate(abstractSyntaxTree, environment);
         }
 
         /// <summary>

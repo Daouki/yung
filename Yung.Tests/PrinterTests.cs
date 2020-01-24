@@ -31,19 +31,19 @@ namespace Yung.Tests
         }
 
         [Fact]
-        public void Print_Nil()
-        {
-            const string expected = "nil";
-            var input = new Nil();
-            var actual = Printer.Print(input);
-            Assert.Equal(expected, actual);
-        }
-        
-        [Fact]
         public void Print_List_Empty()
         {
             const string expected = "()";
             var input = new List();
+            var actual = Printer.Print(input);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Print_Nil()
+        {
+            const string expected = "nil";
+            var input = new Nil();
             var actual = Printer.Print(input);
             Assert.Equal(expected, actual);
         }

@@ -32,7 +32,7 @@ namespace Yung
         private static Queue<string> Tokenize(string sourceCode)
         {
             const string pattern =
-                @"[\s ,]*(~@|[\[\]{}()'`~@]|""(?:[\\].|[^\\""])*""?|;.*|[^\s \[\]{}()'""`~@,;]*)";
+                @"[\s,]*(~@|[\[\]{}()'`~@]|""(?:[\\].|[^\\""])*""?|;.*|[^\s \[\]{}()'""`~@,;]*)";
 
             var tokens = new Queue<string>();
             var regex = new Regex(pattern);
@@ -95,12 +95,12 @@ namespace Yung
 
         private static IValue ReadMap()
         {
-            throw new NotImplementedException("Maps are not available yet.");
+            throw new FeatureNotImplementedException("Maps are not available yet.");
         }
 
         private static IValue ReadSet()
         {
-            throw new NotImplementedException("Sets are not available yet.");
+            throw new FeatureNotImplementedException("Sets are not available yet.");
         }
 
         private static IValue ReadAtom(string token)
@@ -111,7 +111,9 @@ namespace Yung
                 case "#t": return new Boolean(true);
                 case "#f": return new Boolean(false);
                 default:
-                    const string pattern = @"(-?[0-9]*\.[0-9]*)|(-?[0-9]*)";
+                    const string pattern =
+                        @"^(?:(-?[0-9]+\.[0-9]+)|(-?[0-9]+)|" +
+                        @"(:?(?:[a-z]|[A-Z]|[!$%^&*_\-+=<>?/])(?:[a-z]|[A-Z]|[0-9]|[!$%^&*_\-+=<>?/])*))$";
                     var match = Regex.Match(token, pattern);
                     if (!match.Success)
                         throw new YungException($"Token `{token}' is not a valid atom.");
@@ -120,6 +122,8 @@ namespace Yung
                             CultureInfo.InvariantCulture.NumberFormat));
                     if (!string.IsNullOrEmpty(match.Groups[2].Value))
                         return new Integer(long.Parse(token));
+                    if (!string.IsNullOrEmpty(match.Groups[3].Value))
+                        return token[0] == ':' ? (IValue) new Keyword(token) : new Symbol(token);
                     throw new YungException($"Token `{token}' is not a valid atom.");
             }
         }

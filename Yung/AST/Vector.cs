@@ -39,6 +39,15 @@ namespace Yung.AST
         }
 
         /// <summary>
+        ///     Construct a Vector from the given collection by copying the contents of it.
+        /// </summary>
+        /// <param name="collection"></param>
+        public Vector(IEnumerable<IValue> collection)
+        {
+            foreach (var element in collection) Add(element);
+        }
+
+        /// <summary>
         ///     Get or set the capacity of the Vector.
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when this.Count &lt; value.</exception>
