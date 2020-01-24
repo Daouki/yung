@@ -22,7 +22,7 @@ namespace Yung
 
         private static Function MakeNumberOperation(
             MethodBase binaryOperation,
-            Func<INumber, INumber>? unaryOperation = null)
+            Func<INumber, INumber> unaryOperation = null)
         {
             return new Function(arguments =>
             {
@@ -47,7 +47,7 @@ namespace Yung
                     foreach (var value in rest)
                     {
                         if (value.GetType() != expressionType) throw new TypeMismatchException();
-                        result = (INumber) binaryOperation.Invoke(result, new object?[] {value});
+                        result = (INumber) binaryOperation.Invoke(result, new object[] {value});
                     }
 
                     return result;

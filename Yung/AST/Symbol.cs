@@ -21,7 +21,7 @@
             return !(a == b);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (!(obj is Symbol)) return false;
             var symbol = (Symbol) obj;

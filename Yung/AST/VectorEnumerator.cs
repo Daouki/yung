@@ -46,6 +46,6 @@ namespace Yung.AST
             _index = -1;
         }
 
-        object? IEnumerator.Current => Current;
+        object IEnumerator.Current => Current;
     }
 }

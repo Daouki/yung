@@ -8,11 +8,11 @@ namespace Yung.Exceptions
         {
         }
 
-        public FeatureNotImplementedException(string? message) : base(message)
+        public FeatureNotImplementedException(string message) : base(message)
         {
         }
 
-        public FeatureNotImplementedException(string? message, Exception? innerException)
+        public FeatureNotImplementedException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

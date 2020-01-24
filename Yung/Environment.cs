@@ -8,9 +8,9 @@ namespace Yung
     public class Environment
     {
         private readonly Dictionary<Symbol, IValue> _bindings = new Dictionary<Symbol, IValue>();
-        private readonly Environment? _outer;
+        private readonly Environment _outer;
 
-        public Environment(Environment? outer = null)
+        public Environment(Environment outer = null)
         {
             _outer = outer;
         }

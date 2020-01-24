@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Yung.AST
@@ -18,9 +19,16 @@ namespace Yung.AST
         {
         }
 
-        public IValue Current => _current.Value;
+        public IValue Current
+        {
+            get
+            {
+                if (_current != null) return _current.Value;
+                throw new NullReferenceException();
+            }
+        }
 
-        object? IEnumerator.Current => Current;
+        object IEnumerator.Current => Current;
 
         public bool MoveNext()
         {

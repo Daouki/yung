@@ -8,11 +8,11 @@ namespace Yung.Exceptions
         {
         }
 
-        public TypeMismatchException(string? message) : base(message)
+        public TypeMismatchException(string message) : base(message)
         {
         }
 
-        public TypeMismatchException(string? message, Exception? innerException)
+        public TypeMismatchException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

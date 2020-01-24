@@ -9,11 +9,11 @@ namespace Yung.Exceptions
         {
         }
 
-        public SymbolRedefinitionException(string? message) : base(message)
+        public SymbolRedefinitionException(string message) : base(message)
         {
         }
 
-        public SymbolRedefinitionException(string? message, Exception? innerException)
+        public SymbolRedefinitionException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

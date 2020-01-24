@@ -17,7 +17,7 @@ namespace Yung.AST
         ///     The underlying array, that is the base for a Vector class.
         ///     Length of that array is the capacity of a Vector.
         /// </summary>
-        private IValue[] _elements;
+        private IValue[] _elements = new IValue[0];
 
         /// <summary>
         ///     Construct a Vector that is empty and with capacity if zero. When the first element

@@ -8,11 +8,11 @@ namespace Yung.Exceptions
         {
         }
 
-        public YungException(string? message) : base(message)
+        public YungException(string message) : base(message)
         {
         }
 
-        public YungException(string? message, Exception? innerException)
+        public YungException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

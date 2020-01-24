@@ -32,8 +32,7 @@ namespace Yung.AST
         /// <summary>
         ///     Get the first element in the list.
         /// </summary>
-        [AllowNull]
-        public Node Head { get; private set; }
+        public Node Head { get; private set; } = null;
 
         /// <summary>
         ///     Get all elements from the list, except the first.
