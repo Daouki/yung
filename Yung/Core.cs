@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Yung.AST;
@@ -9,39 +10,30 @@ namespace Yung
 {
     public static class Core
     {
-        public static readonly Function Add =
-            MakeNumberOperation(typeof(INumber).GetMethod("Add"));
-
-        public static readonly Function Subtract =
-            MakeNumberOperation(typeof(INumber).GetMethod("Subtract"), arg => arg.Negate());
-
-        public static readonly Function Multiply =
-            MakeNumberOperation(typeof(INumber).GetMethod("Multiply"));
-
-        public static readonly Function Divide =
-            MakeNumberOperation(typeof(INumber).GetMethod("Divide"));
-
-        public static Function IsNil = new Function(args => new Boolean(args.Head.Value is Nil));
-
-        public static readonly Function IsBoolean =
-            new Function(args => new Boolean(args.Head.Value is Boolean));
-
-        public static Function
-            IsFloat = new Function(args => new Boolean(args.Head.Value is Float));
-
-        public static readonly Function IsInteger =
-            new Function(args => new Boolean(args.Head.Value is Integer));
-
-        public static readonly Function IsNumber =
-            new Function(args => new Boolean(args.Head.Value is INumber));
-
-        public static readonly Function IsKeyword =
-            new Function(args => new Boolean(args.Head.Value is Keyword));
-
-        public static readonly Function IsList = new Function(args => new Boolean(args.Head.Value is List));
-
-        public static readonly Function IsVector =
-            new Function(args => new Boolean(args.Head.Value is Vector));
+        public static readonly ImmutableDictionary<Symbol, Function> Functions =
+            ImmutableDictionary<Symbol, Function>.Empty
+                .Add(new Symbol("+"), MakeNumberOperation(typeof(INumber).GetMethod("Add")))
+                .Add(new Symbol("-"),
+                    MakeNumberOperation(typeof(INumber).GetMethod("Subtract"),
+                        value => value.Negate()))
+                .Add(new Symbol("*"), MakeNumberOperation(typeof(INumber).GetMethod("Multiply")))
+                .Add(new Symbol("/"), MakeNumberOperation(typeof(INumber).GetMethod("Divide")))
+                .Add(new Symbol("is-nil?"),
+                    new Function(args => new Boolean(args.Head.Value is Nil)))
+                .Add(new Symbol("is-boolean?"),
+                    new Function(args => new Boolean(args.Head.Value is Boolean)))
+                .Add(new Symbol("is-float?"),
+                    new Function(args => new Boolean(args.Head.Value is Float)))
+                .Add(new Symbol("is-integer?"),
+                    new Function(args => new Boolean(args.Head.Value is Integer)))
+                .Add(new Symbol("is-number?"),
+                    new Function(args => new Boolean(args.Head.Value is INumber)))
+                .Add(new Symbol("is-keyword?"),
+                    new Function(args => new Boolean(args.Head.Value is Keyword)))
+                .Add(new Symbol("is-list?"),
+                    new Function(args => new Boolean(args.Head.Value is List)))
+                .Add(new Symbol("is-vector?"),
+                    new Function(args => new Boolean(args.Head.Value is Vector)));
 
         private static Function MakeNumberOperation(
             MethodBase binaryOperation,

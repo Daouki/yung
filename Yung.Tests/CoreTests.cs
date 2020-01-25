@@ -11,11 +11,7 @@ namespace Yung.Tests
         public CoreFunctionTests()
         {
             _environment = new Environment();
-            _environment.Add(new Symbol("+"), Core.Add);
-            _environment.Add(new Symbol("-"), Core.Subtract);
-            _environment.Add(new Symbol("*"), Core.Multiply);
-            _environment.Add(new Symbol("/"), Core.Divide);
-            _environment.Add(new Symbol("is-nil?"), Core.IsNil);
+            foreach (var (key, value) in Core.Functions) _environment.Add(key, value);
         }
 
         private readonly Environment _environment;
