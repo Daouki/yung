@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
+using CommandLine;
 using Yung.AST;
 using Yung.Exceptions;
+using Yung.Options;
 
 namespace Yung
 {
@@ -9,22 +12,46 @@ namespace Yung
     {
         private static void Main(string[] args)
         {
-            var version = Assembly.GetEntryAssembly()?.GetName().Version;
-            Console.WriteLine($"yung v{version} {System.Environment.NewLine}");
-
-            REPL();
+            if (args.Length == 0) REPL(MakeInitialEnvironment());
+            else
+                Parser.Default.ParseArguments<InteractiveOptions, RunOptions>(args)
+                    .WithParsed<InteractiveOptions>(opts => RunREPL(false))
+                    .WithParsed<RunOptions>(opts => RunFile(opts.File, opts.RunInteractivePrompt));
         }
 
+        private static void RunREPL(bool printVersion)
+        {
+                if (printVersion)
+                {
+                    var version = Assembly.GetEntryAssembly()?.GetName().Version;
+                    Console.WriteLine($"yung v{version} {System.Environment.NewLine}");
+                }
+                REPL(MakeInitialEnvironment());
+        }
+        
+        private static void RunFile(string filePath, bool runREPL)
+        {
+            var sourceCode = File.ReadAllText(filePath);
+            var abstractSyntaxTree = Read(sourceCode);
+            var environment = MakeInitialEnvironment();
+            Evaluate(abstractSyntaxTree, environment);
+            if (runREPL) REPL(environment);
+        }
+
+        private static Environment MakeInitialEnvironment()
+        {
+            var environment = new Environment();
+            foreach (var (key, value) in Core.Functions) environment.Add(key, value);
+            return environment;
+        }
+        
         /// <summary>
         ///     Read-evaluate-print loop. Get the input from the user, parse it, evaluate and print
         ///     the result back to the screen. Repeat until the world dies. Or when the user wants
         ///     to stop. Whatever.
         /// </summary>
-        private static void REPL()
+        private static void REPL(Environment environment)
         {
-            var environment = new Environment();
-            foreach (var (key, value) in Core.Functions) environment.Add(key, value);
-
             while (true)
                 try
                 {

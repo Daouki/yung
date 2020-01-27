@@ -1,0 +1,4 @@
+(writeln nil)
+(writeln #t #f)
+(writeln (+ 2 2))
+(writeln (* 8.0 2.0))

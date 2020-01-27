@@ -21,7 +21,16 @@ namespace Yung
             // in LISP, and it makes reading the tokens easier, as we don't have to pass current
             // token index everywhere.
             var tokens = Tokenize(sourceCode);
-            return tokens.Count == 0 ? new Nil() : ReadForm(tokens);
+
+            var form = ReadForm(tokens);
+            if (tokens.Count == 0) return form;
+
+            // This is kind of a hack; if there is more than a single statement, group them into
+            // a Vector - this will evaluate all the nodes, but won't try to call the first
+            // element as a function.
+            var ast = new List<IValue> {form};
+            while (tokens.Count != 0) ast.Add(ReadForm(tokens));
+            return new Vector(ast);
         }
 
         /// <summary>
