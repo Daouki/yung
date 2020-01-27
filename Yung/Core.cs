@@ -33,7 +33,20 @@ namespace Yung
                 .Add(new Symbol("is-list?"),
                     new Function(args => new Boolean(args.Head.Value is List)))
                 .Add(new Symbol("is-vector?"),
-                    new Function(args => new Boolean(args.Head.Value is Vector)));
+                    new Function(args => new Boolean(args.Head.Value is Vector)))
+                .Add(new Symbol("write"),
+                    new Function(args =>
+                    {
+                        foreach (var arg in args) Console.Write(arg);
+                        return new Nil();
+                    }))
+                .Add(new Symbol("writeln"),
+                    new Function(args =>
+                    {
+                        foreach (var arg in args) Console.Write(Printer.Print(arg));
+                        Console.WriteLine();
+                        return new Nil();
+                    }));
 
         private static Function MakeNumberOperation(
             MethodBase binaryOperation,
