@@ -109,7 +109,7 @@ namespace Yung.Tests
         [InlineData("*s+f")]
         [InlineData("is-s?")]
         [InlineData("+")]
-        [InlineData("!@$%^&*_-+=<>?/")]
+        [InlineData("!$%^&*_-+=<>?/")]
         public void Read_Symbol_HasCorrectType(string input)
         {
             var actual = Reader.Read(input);
