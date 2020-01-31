@@ -19,21 +19,21 @@ namespace Yung
                 .Add(new Symbol("*"), MakeNumberOperation(typeof(INumber).GetMethod("Multiply")))
                 .Add(new Symbol("/"), MakeNumberOperation(typeof(INumber).GetMethod("Divide")))
                 .Add(new Symbol("is-nil?"),
-                    new Function(args => new Boolean(args.Head.Value is Nil)))
+                    new Function(args => new Boolean(args[0] is Nil)))
                 .Add(new Symbol("is-boolean?"),
-                    new Function(args => new Boolean(args.Head.Value is Boolean)))
+                    new Function(args => new Boolean(args[0] is Boolean)))
                 .Add(new Symbol("is-float?"),
-                    new Function(args => new Boolean(args.Head.Value is Float)))
+                    new Function(args => new Boolean(args[0] is Float)))
                 .Add(new Symbol("is-integer?"),
-                    new Function(args => new Boolean(args.Head.Value is Integer)))
+                    new Function(args => new Boolean(args[0] is Integer)))
                 .Add(new Symbol("is-number?"),
-                    new Function(args => new Boolean(args.Head.Value is INumber)))
+                    new Function(args => new Boolean(args[0] is INumber)))
                 .Add(new Symbol("is-keyword?"),
-                    new Function(args => new Boolean(args.Head.Value is Keyword)))
+                    new Function(args => new Boolean(args[0] is Keyword)))
                 .Add(new Symbol("is-list?"),
-                    new Function(args => new Boolean(args.Head.Value is List)))
+                    new Function(args => new Boolean(args[0] is List)))
                 .Add(new Symbol("is-vector?"),
-                    new Function(args => new Boolean(args.Head.Value is Vector)))
+                    new Function(args => new Boolean(args[0] is Vector)))
                 .Add(new Symbol("write"),
                     new Function(args =>
                     {
@@ -57,19 +57,19 @@ namespace Yung
                 if (arguments.Count == 0) return new Nil();
                 if (arguments.Count == 1)
                 {
-                    var argument = arguments.Head.Value;
+                    var argument = arguments[0];
                     if (!(argument is Integer) && !(argument is Float))
                         throw new TypeMismatchException(
                             "The argument to the `+' function has to be either of type Integer or Float.");
 
                     return unaryOperation != null
-                        ? unaryOperation((INumber) arguments.Head.Value)
+                        ? unaryOperation((INumber) arguments[0])
                         : argument;
                 }
 
                 try
                 {
-                    var result = (INumber) arguments.Head.Value;
+                    var result = (INumber) arguments[0];
                     var expressionType = result.GetType();
                     var rest = arguments.ToArray()[1..];
                     foreach (var value in rest)

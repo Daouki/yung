@@ -64,6 +64,11 @@ namespace Yung.AST
             Count += 1;
         }
 
+        public Vector ToVector()
+        {
+            return new Vector(this);
+        }
+
         public class Node
         {
             public readonly Node Next;

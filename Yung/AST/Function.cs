@@ -4,20 +4,35 @@ namespace Yung.AST
 {
     public class Function : IValue
     {
-        private readonly Func<List, IValue> _builtIn;
+        private readonly Func<Vector, IValue> _function;
+        private readonly Vector _parameters = null;
+        private readonly IValue _body = null;
+        private readonly Environment _environment = null;
 
         /// <summary>
         ///     Construct a built-in function.
         /// </summary>
-        /// <param name="builtIn">Built-in function definition.</param>
-        public Function(Func<List, IValue> builtIn)
+        /// <param name="function">Built-in function definition.</param>
+        public Function(Func<Vector, IValue> function)
         {
-            _builtIn = builtIn;
+            _function = function;
         }
 
-        public IValue Apply(List arguments)
+        public Function(
+            Func<Vector, IValue> function,
+            Vector parameters,
+            IValue body,
+            Environment environment)
+            : this(function)
         {
-            return _builtIn(arguments);
+            _parameters = parameters;
+            _body = body;
+            _environment = environment;
+        }
+
+        public IValue Apply(Vector arguments)
+        {
+            return _function(arguments);
         }
     }
 }

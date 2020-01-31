@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Yung.AST;
 using Yung.Exceptions;
 
@@ -13,6 +14,12 @@ namespace Yung
         public Environment(Environment outer = null)
         {
             _outer = outer;
+        }
+
+        public Environment(Environment outer, Vector bindings, Vector values) : this(outer)
+        {
+            Debug.Assert(bindings.Count == values.Count);
+            for (var i = 0; i < bindings.Count; i += 1) Add((Symbol) bindings[i], values[i]);
         }
 
         /// <summary>
