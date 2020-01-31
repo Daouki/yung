@@ -1,3 +1,6 @@
+
+image::https://github.com/Daouki/yung/workflows/.NET%20Core/badge.svg[]
+
 = Yung
 
 :toc:
