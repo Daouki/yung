@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using CommandLine;
 using Yung.AST;
 using Yung.Exceptions;
 using Boolean = Yung.AST.Boolean;
@@ -41,7 +42,7 @@ namespace Yung
         private static Queue<string> Tokenize(string sourceCode)
         {
             const string pattern =
-                @"[\s,]*([\[\]{}()'`]|""(?:[\\].|[^\\""])*""?|;.*|[^\s \[\]{}()'""`,;]*)";
+                @"[\s,]*([\[\]{}()']|""(?:[\\].|[^\\""])*""?|;.*|[^\s \[\]{}()'"",;]*)";
 
             var tokens = new Queue<string>();
             var regex = new Regex(pattern);
@@ -66,6 +67,7 @@ namespace Yung
                 case ")":
                 case "]":
                 case "}": throw new YungException($"Unmatched `{token}'.");
+                case "'": return ReadQuote(tokens);
                 default: return ReadAtom(token);
             }
         }
@@ -112,6 +114,12 @@ namespace Yung
             throw new FeatureNotImplementedException("Sets are not available yet.");
         }
 
+        private static IValue ReadQuote(Queue<string> tokens)
+        {
+            var form = ReadForm(tokens);
+            return new List {form, new Symbol("quote")};
+        }
+        
         private static IValue ReadAtom(string token)
         {
             switch (token)
