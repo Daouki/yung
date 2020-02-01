@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Yung.AST;
 using Yung.Exceptions;
 
@@ -65,9 +66,13 @@ namespace Yung
             // (def name init)
             // (def name [args] body)
             var argumentArray = arguments as IValue[] ?? arguments.ToArray();
-            return argumentArray.Length == 2
-                ? EvaluateBindingDefinition(argumentArray, environment)
-                : EvaluateFunctionDefinition(argumentArray, environment);
+            return argumentArray.Length switch
+            {
+                2 => EvaluateBindingDefinition(argumentArray, environment),
+                3 => EvaluateFunctionDefinition(argumentArray, environment),
+                _ => throw new InvalidNumberOfFunctionArgumentsException(
+                    "def", new[] {2, 3}, argumentArray.Length)
+            };
         }
 
         private static IValue EvaluateBindingDefinition(
@@ -82,20 +87,19 @@ namespace Yung
         }
 
         private static IValue EvaluateFunctionDefinition(
-            IEnumerable<IValue> arguments,
+            IReadOnlyList<IValue> arguments,
             Environment environment)
         {
-            var argumentArray = arguments as IValue[] ?? arguments.ToArray();
-            var name = argumentArray[0] as Symbol ?? throw new TypeMismatchException(
+            var name = arguments[0] as Symbol ?? throw new TypeMismatchException(
                            "Expected the first argument of `def' to be a Symbol, " +
-                           $"but got {argumentArray[0].GetType().Name} instead.");
-            var parameters = argumentArray[1] as Vector ?? throw new TypeMismatchException(
-                                 "Expected the second argument of `def' to be a Vector of parameters, " +
-                                 $"but got {argumentArray[0].GetType().Name} instead.");
-            var body = argumentArray[2];
+                           $"but got {arguments[0].GetType().Name} instead.");
+            var parameters = arguments[1] as Vector ?? throw new TypeMismatchException(
+                                 "Expected the second argument of `def' to be a Vector, " +
+                                 $"but got {arguments[0].GetType().Name} instead.");
+            var body = arguments[2];
 
-            IValue Function(Vector arguments) =>
-                Evaluate(body, new Environment(environment, parameters, arguments));
+            IValue Function(Vector functionArguments) =>
+                Evaluate(body, new Environment(environment, parameters, functionArguments));
 
             var function = new Function(Function, parameters, body, environment);
             environment.Add(name, function);
@@ -105,8 +109,10 @@ namespace Yung
         private static IValue EvaluateDo(IEnumerable<IValue> expressions, Environment environment)
         {
             // (do expr*)
-            // Evaluate all the arguments and yield the last one.
             var expressionArray = expressions.ToArray();
+
+            // Evaluate all the arguments and yield the last one.
+            if (expressionArray.Length == 0) return new Nil();
             for (var i = 0; i < expressionArray.Length - 1; i += 1)
                 Evaluate(expressionArray[i], environment);
             return Evaluate(expressionArray[^1], environment);
@@ -116,7 +122,12 @@ namespace Yung
         {
             // (fn [args] body)
             var argumentArray = arguments as IValue[] ?? arguments.ToArray();
-            var parameters = argumentArray[0] as Vector ?? throw new TypeMismatchException();
+            AssertFunctionArgumentCount("if", 2, argumentArray.Length);
+
+            var parameters = argumentArray[0] as Vector ??
+                             throw new TypeMismatchException(
+                                 "Expected the 1st argument to `fn' to be a Vector, " +
+                                 $"but got {argumentArray[0].GetType().Name} instead.");
             var body = argumentArray[1];
 
             IValue Function(Vector arguments) =>
@@ -125,20 +136,26 @@ namespace Yung
             return new Function(Function, parameters, body, environment);
         }
 
-        private static IValue EvaluateIf(IEnumerable<IValue> expression, Environment environment)
+        private static IValue EvaluateIf(IEnumerable<IValue> argument, Environment environment)
         {
             // (if test then else)
-            var expressionAsArray = expression.ToArray();
-            var condition = Evaluate(expressionAsArray[0], environment);
+            var argumentArray = argument.ToArray();
+            AssertFunctionArgumentCount("if", 3, argumentArray.Length);
+
+            var condition = Evaluate(argumentArray[0], environment);
 
             // If the 'test' condition is either a Nil or #f or an empty list, evaluate and yield
-            // the 'else' expression.
-            if (condition is Nil ||
-                condition is Boolean boolean && !boolean.Value ||
-                condition is List list && list.Count == 0)
-                return Evaluate(expressionAsArray[2], environment);
-            // In any other case, evaluate and yield the 'then' expression.
-            return Evaluate(expressionAsArray[1], environment);
+            // the 'else' expression. In any other case, evaluate and yield the 'then' expression.
+            return Evaluate(
+                IsFalsehood(condition) ? argumentArray[2] : argumentArray[1],
+                environment);
+        }
+
+        private static bool IsFalsehood(IValue form)
+        {
+            return form is Nil ||
+                   form is Boolean boolean && !boolean.Value ||
+                   form is List list && list.Count == 0;
         }
 
         private static IValue EvaluateInvocation(IValue invocation, Environment environment)
@@ -149,6 +166,13 @@ namespace Yung
             var function = (Function) evaluated.Head.Value;
             var arguments = evaluated.Tail.ToVector();
             return function.Apply(arguments);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void AssertFunctionArgumentCount(string function, int expected, int given)
+        {
+            if (expected != given)
+                throw new InvalidNumberOfFunctionArgumentsException(function, expected, given);
         }
     }
 }

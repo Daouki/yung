@@ -23,8 +23,8 @@ are supplied, returns _nil_.
 
 == (if _test_ _then_ _else_)
 
-Evaluates _test_. If the result isn't a falsehood (neither _#f_ nor _nil_), evaluates and yields
-_then_, otherwise, evaluates and yields _else_.
+Evaluates _test_. If the result isn't a falsehood (neither _#f_ nor _nil_ nor a empty list `()`),
+evaluates and yields _then_, otherwise, evaluates and yields _else_.
 
 == (quote _form_)
 

@@ -41,7 +41,7 @@ namespace Yung
         private static Queue<string> Tokenize(string sourceCode)
         {
             const string pattern =
-                @"[\s,]*(~@|[\[\]{}()'`~@]|""(?:[\\].|[^\\""])*""?|;.*|[^\s \[\]{}()'""`~@,;]*)";
+                @"[\s,]*([\[\]{}()'`]|""(?:[\\].|[^\\""])*""?|;.*|[^\s \[\]{}()'""`,;]*)";
 
             var tokens = new Queue<string>();
             var regex = new Regex(pattern);
