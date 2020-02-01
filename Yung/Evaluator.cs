@@ -23,6 +23,7 @@ namespace Yung
                 "do" => EvaluateDo(list.Tail, environment),
                 "fn" => EvaluateFn(list.Tail, environment),
                 "if" => EvaluateIf(list.Tail, environment),
+                "quote" => EvaluateQuote(list.Tail),
                 _ => EvaluateInvocation(list, environment)
             };
         }
@@ -156,6 +157,13 @@ namespace Yung
             return form is Nil ||
                    form is Boolean boolean && !boolean.Value ||
                    form is List list && list.Count == 0;
+        }
+
+        private static IValue EvaluateQuote(IEnumerable<IValue> arguments)
+        {
+            var argumentArray = arguments as IValue[] ?? arguments.ToArray();
+            AssertFunctionArgumentCount("quote", 1, argumentArray.Length);
+            return argumentArray[0];
         }
 
         private static IValue EvaluateInvocation(IValue invocation, Environment environment)

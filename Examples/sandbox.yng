@@ -22,3 +22,7 @@
 
 (def f [x] (* x x))
 (writeln (f 1) (f 2) (f 3))
+
+(writeln (quote asdf))
+(writeln (quote ()))
+(writeln (quote (+ 2 2)))
