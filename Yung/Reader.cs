@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using CommandLine;
 using Yung.AST;
 using Yung.Exceptions;
 using Boolean = Yung.AST.Boolean;
+using String = Yung.AST.String;
 
 namespace Yung
 {
@@ -122,6 +123,14 @@ namespace Yung
         
         private static IValue ReadAtom(string token)
         {
+            Debug.Assert(token != null);
+            
+            if (token[0] == '"')
+            {
+                if (token[^1] != '"') throw new YungException("Unterminated string.");
+                return new String(token);
+            }
+            
             switch (token)
             {
                 case "nil": return new Nil();

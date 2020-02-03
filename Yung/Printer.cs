@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using Yung.AST;
 using Yung.Exceptions;
+using String = Yung.AST.String;
 
 namespace Yung
 {
@@ -17,6 +18,7 @@ namespace Yung
                 Float floating => AddDotZeroIfInteger(floating.Value.ToString("G7",
                     CultureInfo.InvariantCulture.NumberFormat)),
                 Nil _ => "nil",
+                String @string => @string.Value,
                 Symbol symbol => symbol.Value,
                 Function _ => "#<function>",
                 Keyword keyword => keyword.Value,
