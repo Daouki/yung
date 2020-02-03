@@ -21,14 +21,15 @@ namespace Yung
 
         private static void RunREPL(bool printVersion)
         {
-                if (printVersion)
-                {
-                    var version = Assembly.GetEntryAssembly()?.GetName().Version;
-                    Console.WriteLine($"yung v{version} {System.Environment.NewLine}");
-                }
-                REPL(MakeInitialEnvironment());
+            if (printVersion)
+            {
+                var version = Assembly.GetEntryAssembly()?.GetName().Version;
+                Console.WriteLine($"yung v{version} {System.Environment.NewLine}");
+            }
+
+            REPL(MakeInitialEnvironment());
         }
-        
+
         private static void RunFile(string filePath, bool runREPL)
         {
             var sourceCode = File.ReadAllText(filePath);
@@ -42,9 +43,12 @@ namespace Yung
         {
             var environment = new Environment();
             foreach (var (key, value) in Core.Functions) environment.Add(key, value);
+            Evaluate(Read("(def not [x] (if x #f #t))"), environment);
+            Evaluate(Read("(def when [test body] (if test body nil))"), environment);
+            Evaluate(Read("(def unless [test body] (if test nil body))"), environment);
             return environment;
         }
-        
+
         /// <summary>
         ///     Read-evaluate-print loop. Get the input from the user, parse it, evaluate and print
         ///     the result back to the screen. Repeat until the world dies. Or when the user wants
