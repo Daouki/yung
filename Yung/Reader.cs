@@ -128,7 +128,7 @@ namespace Yung
             if (token[0] == '"')
             {
                 if (token[^1] != '"') throw new YungException("Unterminated string.");
-                return new String(token);
+                return new String(token[1..^1]);
             }
             
             switch (token)

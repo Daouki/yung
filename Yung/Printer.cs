@@ -18,7 +18,7 @@ namespace Yung
                 Float floating => AddDotZeroIfInteger(floating.Value.ToString("G7",
                     CultureInfo.InvariantCulture.NumberFormat)),
                 Nil _ => "nil",
-                String @string => @string.Value,
+                String @string => $"\"{@string.Value}\"",
                 Symbol symbol => symbol.Value,
                 Function _ => "#<function>",
                 Keyword keyword => keyword.Value,
