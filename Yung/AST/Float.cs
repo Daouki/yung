@@ -64,5 +64,53 @@ namespace Yung.AST
                 throw new TypeMismatchException();
             }
         }
+        
+        public Boolean Less(INumber number)
+        {
+            try
+            {
+                return new Boolean(Value < ((Float) number).Value);
+            }
+            catch (InvalidCastException)
+            {
+                throw new TypeMismatchException();
+            }
+        }
+
+        public Boolean LessOrEqual(INumber number)
+        {
+            try
+            {
+                return new Boolean(Value <= ((Float) number).Value);
+            }
+            catch (InvalidCastException)
+            {
+                throw new TypeMismatchException();
+            }
+        }
+
+        public Boolean Greater(INumber number)
+        {
+            try
+            {
+                return new Boolean(Value > ((Float) number).Value);
+            }
+            catch (InvalidCastException)
+            {
+                throw new TypeMismatchException();
+            }
+        }
+
+        public Boolean GreaterOrEqual(INumber number)
+        {
+            try
+            {
+                return new Boolean(Value >= ((Float) number).Value);
+            }
+            catch (InvalidCastException)
+            {
+                throw new TypeMismatchException();
+            }
+        }
     }
 }

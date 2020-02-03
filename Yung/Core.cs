@@ -14,12 +14,18 @@ namespace Yung
     {
         public static readonly ImmutableDictionary<Symbol, Function> Functions =
             ImmutableDictionary<Symbol, Function>.Empty
-                .Add(new Symbol("+"), MakeNumberOperation(typeof(INumber).GetMethod("Add")))
+                .Add(new Symbol("+"), MakeNumberArithmeticOperation(typeof(INumber).GetMethod("Add")))
                 .Add(new Symbol("-"),
-                    MakeNumberOperation(typeof(INumber).GetMethod("Subtract"),
+                    MakeNumberArithmeticOperation(typeof(INumber).GetMethod("Subtract"),
                         value => value.Negate()))
-                .Add(new Symbol("*"), MakeNumberOperation(typeof(INumber).GetMethod("Multiply")))
-                .Add(new Symbol("/"), MakeNumberOperation(typeof(INumber).GetMethod("Divide")))
+                .Add(new Symbol("*"), MakeNumberArithmeticOperation(typeof(INumber).GetMethod("Multiply")))
+                .Add(new Symbol("/"), MakeNumberArithmeticOperation(typeof(INumber).GetMethod("Divide")))
+                .Add(new Symbol("<"), MakeNumberComparisonOperation(typeof(INumber).GetMethod("Less")))
+                .Add(new Symbol("<="),
+                    MakeNumberComparisonOperation(typeof(INumber).GetMethod("LessOrEqual")))
+                .Add(new Symbol(">"), MakeNumberComparisonOperation(typeof(INumber).GetMethod("Greater")))
+                .Add(new Symbol(">="),
+                    MakeNumberComparisonOperation(typeof(INumber).GetMethod("GreaterOrEqual")))
                 // Type predicates.
                 .Add(new Symbol("is-nil?"), IsType<Nil>("nil"))
                 .Add(new Symbol("is-boolean?"), IsType<Boolean>("boolean"))
@@ -31,13 +37,14 @@ namespace Yung
                 .Add(new Symbol("is-list?"), IsType<List>("list"))
                 .Add(new Symbol("is-vector?"), IsType<Vector>("vector"))
                 // String operations.
+                .Add(new Symbol("to-string"), ToString())
                 .Add(new Symbol("string/concatenate"), StringConcatenate())
                 .Add(new Symbol("string/join"), StringJoin())
                 // Console IO operations.
                 .Add(new Symbol("write"), Write())
-                .Add(new Symbol("writeln"), WriteLn());
+                .Add(new Symbol("write-line"), WriteLine());
 
-        private static Function MakeNumberOperation(
+        private static Function MakeNumberArithmeticOperation(
             MethodBase binaryOperation,
             Func<INumber, INumber> unaryOperation = null)
         {
@@ -77,6 +84,28 @@ namespace Yung
             });
         }
 
+        private static Function MakeNumberComparisonOperation(MethodBase comparisonOperation)
+        {
+            return new Function(arguments =>
+            {
+                // ReSharper disable once ConvertIfStatementToSwitchStatement
+                if (arguments.Count == 0) return new Nil();
+                if (arguments.Count == 1) return new Boolean(true);
+
+                try
+                {
+                    for (var i = 0; i < arguments.Count - 1; i += 1)
+                        if (!((INumber) arguments[i]).Less((INumber) arguments[i + 1]).Value)
+                            return Boolean.False;
+                    return Boolean.True;
+                }
+                catch (InvalidCastException)
+                {
+                    throw new TypeMismatchException();
+                }
+            });
+        }
+
         private static Function IsType<T>(string typeName)
         {
             return new Function(args =>
@@ -85,6 +114,17 @@ namespace Yung
                     throw new InvalidNumberOfFunctionArgumentsException(
                         $"is-{typeName}?", 1, args.Count);
                 return new Boolean(args[0] is T);
+            });
+        }
+
+        private new static Function ToString()
+        {
+            return new Function(args =>
+            {
+                var value = new StringBuilder();
+                foreach (var arg in args)
+                    value.Append(arg is String str ? str.Value : Printer.Print(arg));
+                return new String(value.ToString());
             });
         }
 
@@ -127,16 +167,16 @@ namespace Yung
         {
             return new Function(args =>
             {
-                foreach (var arg in args) Console.Write(Printer.Print(arg));
+                foreach (var arg in args) Console.Write(arg is String str ? str.Value : Printer.Print(arg));
                 return new Nil();
             });
         }
 
-        private static Function WriteLn()
+        private static Function WriteLine()
         {
             return new Function(args =>
             {
-                foreach (var arg in args) Console.Write(Printer.Print(arg));
+                foreach (var arg in args) Console.Write(arg is String str ? str.Value : Printer.Print(arg));
                 Console.Write($"{System.Environment.NewLine}");
                 return new Nil();
             });

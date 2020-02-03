@@ -2,6 +2,9 @@
 {
     public class Boolean : IValue
     {
+        public static readonly Boolean True = new Boolean(true); 
+        public static readonly Boolean False = new Boolean(false); 
+        
         public Boolean(bool value)
         {
             Value = value;

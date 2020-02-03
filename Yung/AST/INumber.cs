@@ -11,5 +11,13 @@
         INumber Multiply(INumber number);
 
         INumber Divide(INumber number);
+        
+        Boolean Less(INumber number);
+        
+        Boolean LessOrEqual(INumber number);
+
+        Boolean Greater(INumber number);
+
+        Boolean GreaterOrEqual(INumber number);
     }
 }

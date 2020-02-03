@@ -1,28 +1,13 @@
-(writeln nil)
-(writeln #t #f)
-(writeln (+ 2 2))
-(writeln (* 8.0 2.0))
+(def fib [n]
+  (if (< n 3)
+    1
+    (+ (fib (- n 1)) (fib (- n 2))))))
 
-(writeln (if #t 1 0))
-(writeln (if #f 1 0))
-;(writeln (when #t) 1)
-;(writeln (when #f) 0)
-;(writeln (unless #f) 1)
-;(writeln (unless #f) 0)
-
-;; This is a comment test.
-
-(writeln (do 1 2 3))
-
-; This is an another comment test.
-
-
-(writeln (fn [x] (+ x x)))
-(writeln ((fn [x] (+ x x)) 7))
-
-(def f [x] (* x x))
-(writeln (f 1) (f 2) (f 3))
-
-(writeln 'asdf)
-(writeln '())
-(writeln '(+ 2 2))
+(write-line "fibonacci: " (fib 3))
+(write-line "fibonacci: " (fib 4))
+(write-line "fibonacci: " (fib 5))
+(write-line "fibonacci: " (fib 6))
+(write-line "fibonacci: " (fib 7))
+(write-line "fibonacci: " (fib 13))
+(write-line "fibonacci: " (fib 17))
+(write-line "fibonacci: " (fib 21))
